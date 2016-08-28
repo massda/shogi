@@ -40,4 +40,10 @@ public class Position {
 		}
 	}
 
+	public String toStringKifuBefore(){
+		Integer kifuX = 9 - x;
+		Integer kifuY = y + 1;
+		return "" + kifuX + kifuY;
+	}
+
 }

@@ -61,12 +61,12 @@ public class Hisha extends Piece {
 	}
 
 	@Override
-	protected String toStringRegular() {
+	public String toStringRegular() {
 		return "飛";
 	}
 
 	@Override
-	protected String toStringPromotion() {
+	public String toStringPromotion() {
 		return "龍";
 	}
 

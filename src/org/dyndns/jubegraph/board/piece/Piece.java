@@ -107,9 +107,9 @@ public abstract class Piece {
 		}
 	}
 
-	abstract protected String toStringRegular();
+	abstract public String toStringRegular();
 
-	abstract protected String toStringPromotion();
+	abstract public String toStringPromotion();
 
 	public boolean equals(Piece koma) {
 		return this.getClass() == koma.getClass()

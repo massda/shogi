@@ -38,13 +38,13 @@ public class Kin extends Piece {
 	}
 
 	@Override
-	protected String toStringRegular() {
+	public String toStringRegular() {
 		// TODO 自動生成されたメソッド・スタブ
 		return "金";
 	}
 
 	@Override
-	protected String toStringPromotion() {
+	public String toStringPromotion() {
 		return toStringRegular();
 	}
 

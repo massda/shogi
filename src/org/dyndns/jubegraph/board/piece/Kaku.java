@@ -61,12 +61,12 @@ public class Kaku extends Piece {
 	}
 
 	@Override
-	protected String toStringRegular() {
+	public String toStringRegular() {
 		return "角";
 	}
 
 	@Override
-	protected String toStringPromotion() {
+	public String toStringPromotion() {
 		return "馬";
 	}
 

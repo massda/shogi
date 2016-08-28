@@ -54,12 +54,12 @@ public class Keima extends Piece {
 	}
 
 	@Override
-	protected String toStringRegular() {
+	public String toStringRegular() {
 		return "桂";
 	}
 
 	@Override
-	protected String toStringPromotion() {
+	public String toStringPromotion() {
 		return "圭";
 	}
 

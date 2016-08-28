@@ -1,8 +1,10 @@
 package org.dyndns.jubegraph.board;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.dyndns.jubegraph.board.piece.Fu;
 import org.dyndns.jubegraph.board.piece.Gin;
@@ -133,16 +135,21 @@ public class Board {
 			Piece currentPiece = board[x][y];
 			currentPiece.getTurn().changeTurn();
 			if (currentPiece.isSente()) {
-				senteHold.put(currentPiece, senteHold.get(currentPiece) + 1);
+				Integer count = 1;
+				if (senteHold.containsKey(currentPiece)) {
+					count += senteHold.get(currentPiece);
+				}
+				senteHold.put(currentPiece, count);
 			} else {
-				goteHold.put(currentPiece, goteHold.get(currentPiece) + 1);
+				Integer count = 1;
+				if (goteHold.containsKey(currentPiece)) {
+					count += goteHold.get(currentPiece);
+				}
+				goteHold.put(currentPiece, count);
 			}
-
-			System.err.println("Invalid put");
-			throw new RuntimeException();
-		} else {
-			board[p.getX()][p.getY()] = piece;
 		}
+		board[p.getX()][p.getY()] = piece;
+
 	}
 
 	public Piece get(Integer i, Integer j) {
@@ -150,23 +157,89 @@ public class Board {
 	}
 
 	public static List<Move> getMoveList(Board board, Turn turn) {
+		List<Move> moveList = new ArrayList<Move>();
+
 		for (Integer i = 0; i < 9; ++i) {
 			for (Integer j = 0; j < 9; ++j) {
 				Piece piece = board.get(i, j);
 				if (piece != null) {
 					if (piece.getTurn() == turn) {
 						Position position = new Position(i, j);
-						System.out.println("" + i + "," + j + "," + piece);
-						List<Move> moveList = piece.getMovedPositionList(position, board);
-						System.out.println(moveList);
+						moveList.addAll(piece.getMovedPositionList(position, board));
 					}
 				}
 			}
 		}
-		return null;
+		return moveList;
 	}
 
-	public static void main(String[] args) {
+	public static String getKifuLine(Integer num, Move move) {
+		String kifuLine = new String();
+		kifuLine += num.toString() + " ";
+		kifuLine += move.getAfter().toString();
+		Piece p = move.getPiece();
+		if (p.isPromotion() && !move.getPromotion()) {
+			if(p.getClass() == Kaku.class){
+				kifuLine += "馬";
+			}else if(p.getClass() == Hisha.class){
+				kifuLine += "龍";
+			}else if(p.getClass() == Fu.class){
+				kifuLine += "と";
+			}else{
+				kifuLine += "成" + p.toStringRegular();
+			}
+		}else{
+			kifuLine += p.toStringRegular();
+		}
+		if (move.getPromotion()) {
+			kifuLine += "成";
+		}
+		kifuLine += "(" + move.getBefore().toStringKifuBefore() + ")";
+		kifuLine += " ( 0:00/00:00:00)";
+
+		return kifuLine;
+	}
+
+	public static void randomTest2() {
+		Board board = new Board();
+		Turn turn = Turn.SENTE;
+
+		for (Integer i = 0; i < 1000; ++i) {
+			List<Move> moveList = getMoveList(board, turn);
+
+			Random rnd = new Random();
+			int ran = rnd.nextInt(moveList.size());
+			Move move = moveList.get(ran);
+
+			board.move(move);
+			String kifuLine = getKifuLine(i + 1, move);
+			System.out.println(kifuLine);
+
+			turn = turn.changeTurn();
+		}
+	}
+
+	public static void randomTest() {
+		Board board = new Board();
+		Turn turn = Turn.SENTE;
+		board.print();
+
+		for (Integer i = 0; i < 200; ++i) {
+			List<Move> moveList = getMoveList(board, turn);
+
+			Random rnd = new Random();
+			int ran = rnd.nextInt(moveList.size());
+			Move move = moveList.get(ran);
+
+			board.move(move);
+			System.out.println(move);
+			System.out.println();
+			turn = turn.changeTurn();
+			board.print();
+		}
+	}
+
+	public static void firstTest() {
 		Board board = new Board();
 
 		board.print();
@@ -178,6 +251,10 @@ public class Board {
 
 		Board.getMoveList(board, Turn.SENTE);
 
+	}
+
+	public static void main(String[] args) {
+		randomTest2();
 	}
 
 }

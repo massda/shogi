@@ -63,12 +63,12 @@ public class Gin extends Piece {
 	}
 
 	@Override
-	protected String toStringRegular() {
+	public String toStringRegular() {
 		return "銀";
 	}
 
 	@Override
-	protected String toStringPromotion() {
+	public String toStringPromotion() {
 		return "全";
 	}
 

@@ -53,20 +53,19 @@ public class Kyou extends Piece {
 	@Override
 	public List<Move> getMoveRegularGote(Position before, Board board) {
 		List<Move> moveList = new ArrayList<Move>();
-
 		Integer x = before.getX();
 
 		for (Integer y = before.getY() + 1; y < 9; ++y) {
 			Piece p = board.get(x, y);
 			if (p == null || p.getTurn() != this.getTurn()) {
-				moveList.add(new Move(before, new Position(before.getX(), y),
+				moveList.add(new Move(before, new Position(x, y),
 						false, this));
 				if (y >= 6) {
 					moveList.add(new Move(before,
 							new Position(before.getX(), y), true, this));
 				}
 			}
-			if (p == null) {
+			if (p != null) {
 				break;
 			}
 		}
@@ -75,12 +74,12 @@ public class Kyou extends Piece {
 	}
 
 	@Override
-	protected String toStringRegular() {
+	public String toStringRegular() {
 		return "香";
 	}
 
 	@Override
-	protected String toStringPromotion() {
+	public String toStringPromotion() {
 		return "杏";
 	}
 
