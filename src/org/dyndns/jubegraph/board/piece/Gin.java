@@ -19,6 +19,11 @@ public class Gin extends Piece {
 	}
 
 	@Override
+	public Gin clone(){
+		return new Gin(this.turn, this.isPromotion);
+	}
+
+	@Override
 	public List<Move> getMovePromotionSente(Position before, Board board) {
 		return Kin.getMoveSenteKinBase(before, this, board);
 	}

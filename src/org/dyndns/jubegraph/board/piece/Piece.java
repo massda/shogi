@@ -22,6 +22,8 @@ public abstract class Piece {
 		this.isPromotion = isPromotion;
 	}
 
+	abstract public Piece clone();
+
 	public void promote() {
 		isPromotion = true;
 	}
@@ -46,9 +48,9 @@ public abstract class Piece {
 			Board board) {
 		Piece p = board.get(newX, newY);
 		if (p == null || p.getTurn() != this.getTurn()) {
-			moveList.add(new Move(before, new Position(newX, newY), promotion, this));
+			moveList.add(new Move(before, new Position(newX, newY), promotion, this.clone()));
 			if (!promotion && !this.isPromotion() && this.canPromote(newY)) {
-				moveList.add(new Move(before, new Position(newX, newY), true, this));
+				moveList.add(new Move(before, new Position(newX, newY), true, this.clone()));
 			}
 		}
 		return p == null;

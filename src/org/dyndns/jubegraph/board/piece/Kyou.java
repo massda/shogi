@@ -19,6 +19,11 @@ public class Kyou extends Piece {
 	}
 
 	@Override
+	public Kyou clone(){
+		return new Kyou(this.turn, this.isPromotion);
+	}
+
+	@Override
 	public List<Move> getMovePromotionSente(Position before, Board board) {
 		return Kin.getMoveSenteKinBase(before, this, board);
 	}

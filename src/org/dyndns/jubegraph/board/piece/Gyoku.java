@@ -18,6 +18,11 @@ public class Gyoku extends Piece {
 	}
 
 	@Override
+	public Gyoku clone(){
+		return new Gyoku(this.turn, this.isPromotion);
+	}
+
+	@Override
 	public List<Move> getMoveRegularSente(Position before, Board board) {
 		Integer[][] moveType = { { 1, -1 }, { 0, -1 }, { -1, -1 }, { 1, 0 }, { -1, 0 }, { 1, 1 }, { 0, 1 }, { -1, 1 } };
 		List<Move> moveList = makeMove(before, moveType, false, board);

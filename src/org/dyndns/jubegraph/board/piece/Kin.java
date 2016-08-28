@@ -18,6 +18,11 @@ public class Kin extends Piece {
 	}
 
 	@Override
+	public Kin clone(){
+		return new Kin(this.turn, this.isPromotion);
+	}
+
+	@Override
 	public List<Move> getMovePromotionSente(Position before, Board board) {
 		return getMoveSenteKin(before, board);
 	}

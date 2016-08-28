@@ -19,6 +19,11 @@ public class Hisha extends Piece {
 	}
 
 	@Override
+	public Hisha clone(){
+		return new Hisha(this.turn, this.isPromotion);
+	}
+
+	@Override
 	public List<Move> getMovePromotionSente(Position before, Board board) {
 		List<Move> moveList = new ArrayList<Move>();
 		moveList.addAll(getMoveBase(before, false, board));

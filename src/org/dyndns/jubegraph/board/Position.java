@@ -46,4 +46,8 @@ public class Position {
 		return "" + kifuX + kifuY;
 	}
 
+	public Boolean equals(Position p){
+		return this.x == p.getX() && this.y == p.getY();
+	}
+
 }

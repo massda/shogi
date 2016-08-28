@@ -39,13 +39,32 @@ public class Board {
 		init();
 	}
 
+	public Board clone() {
+		Board boardObj = new Board();
+		for (Integer i = 0; i < this.board.length; ++i) {
+			for (Integer j = 0; j < this.board.length; ++j) {
+				Piece org = board[i][j];
+				if (org != null) {
+					boardObj.board[i][j] = org.clone();
+				}
+			}
+		}
+		for (Piece p : this.senteHold.keySet()) {
+			boardObj.senteHold.put(p, this.senteHold.get(p));
+		}
+		for (Piece p : this.goteHold.keySet()) {
+			boardObj.goteHold.put(p, this.goteHold.get(p));
+		}
+		return boardObj;
+	}
+
 	public void init() {
 
 		board = new Piece[9][9];
 		senteHold = new HashMap<Piece, Integer>();
 		goteHold = new HashMap<Piece, Integer>();
 
-		initBoard();
+		//		initBoard();
 	}
 
 	public void initBoard() {
@@ -106,7 +125,7 @@ public class Board {
 	}
 
 	public void move(Move move) {
-		Piece koma = move.getPiece();
+		Piece koma = move.getPiece().clone();
 
 		Position before = move.getBefore();
 		Position after = move.getAfter();
@@ -173,22 +192,63 @@ public class Board {
 		return moveList;
 	}
 
+	// 王手放置を除く
+	public static List<Move> checkCheckMate(Board board, Turn turn, List<Move> moveListCandidate) {
+
+		List<Move> resultList = new ArrayList<Move>();
+		for (Move move : moveListCandidate) {
+			Board tmpBoard = board.clone();
+			tmpBoard.move(move);
+			List<Move> nextMoveList = getMoveList(tmpBoard, turn.changeTurn());
+			Position gyokuPosition = tmpBoard.getGyokuPosition(turn);
+			Boolean isCheckMate = false;
+			for (Move nextMove : nextMoveList) {
+				Position after = nextMove.after;
+
+				if (gyokuPosition.equals(after)) {
+					isCheckMate = true;
+					break;
+				}
+			}
+
+			if (!isCheckMate) {
+				resultList.add(move);
+			} else {
+				//				tmpBoard.print();
+			}
+		}
+
+		return resultList;
+	}
+
+	public Position getGyokuPosition(Turn turn) {
+		for (Integer i = 0; i < 9; ++i) {
+			for (Integer j = 0; j < 9; ++j) {
+				Piece piece = get(i, j);
+				if (piece != null && piece.getClass() == Gyoku.class && piece.getTurn() == turn) {
+					return new Position(i, j);
+				}
+			}
+		}
+		return null;
+	}
+
 	public static String getKifuLine(Integer num, Move move) {
 		String kifuLine = new String();
 		kifuLine += num.toString() + " ";
 		kifuLine += move.getAfter().toString();
 		Piece p = move.getPiece();
 		if (p.isPromotion() && !move.getPromotion()) {
-			if(p.getClass() == Kaku.class){
+			if (p.getClass() == Kaku.class) {
 				kifuLine += "馬";
-			}else if(p.getClass() == Hisha.class){
+			} else if (p.getClass() == Hisha.class) {
 				kifuLine += "龍";
-			}else if(p.getClass() == Fu.class){
+			} else if (p.getClass() == Fu.class) {
 				kifuLine += "と";
-			}else{
+			} else {
 				kifuLine += "成" + p.toStringRegular();
 			}
-		}else{
+		} else {
 			kifuLine += p.toStringRegular();
 		}
 		if (move.getPromotion()) {
@@ -200,12 +260,28 @@ public class Board {
 		return kifuLine;
 	}
 
+	public static void editBoard(Board board) {
+		board.board[4][0] = new Gyoku(Turn.GOTE);
+		board.board[4][8] = new Gyoku(Turn.SENTE);
+		board.board[1][7] = new Kaku(Turn.SENTE);
+		//		board.board[5][1] = new Hisha(Turn.GOTE);
+
+	}
+
 	public static void randomTest2() {
 		Board board = new Board();
+		//editBoard(board);
+		board.initBoard();
 		Turn turn = Turn.SENTE;
 
-		for (Integer i = 0; i < 1000; ++i) {
+		for (Integer i = 0; i < 200; ++i) {
 			List<Move> moveList = getMoveList(board, turn);
+			moveList = checkCheckMate(board, turn, moveList);
+
+			if (moveList.isEmpty()) {
+				System.out.println("まで");
+				break;
+			}
 
 			Random rnd = new Random();
 			int ran = rnd.nextInt(moveList.size());

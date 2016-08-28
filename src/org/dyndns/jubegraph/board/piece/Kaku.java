@@ -19,6 +19,11 @@ public class Kaku extends Piece {
 	}
 
 	@Override
+	public Kaku clone(){
+		return new Kaku(this.turn, this.isPromotion);
+	}
+
+	@Override
 	public List<Move> getMovePromotionSente(Position before, Board board) {
 		List<Move> moveList = new ArrayList<Move>();
 		moveList.addAll(getMoveBase(before, false, board));

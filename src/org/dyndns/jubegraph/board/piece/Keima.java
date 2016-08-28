@@ -19,6 +19,11 @@ public class Keima extends Piece {
 	}
 
 	@Override
+	public Keima clone(){
+		return new Keima(this.turn, this.isPromotion);
+	}
+
+	@Override
 	public List<Move> getMovePromotionSente(Position before, Board board) {
 		return Kin.getMoveSenteKinBase(before, this, board);
 	}

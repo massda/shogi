@@ -19,6 +19,11 @@ public class Fu extends Piece {
 	}
 
 	@Override
+	public Fu clone(){
+		return new Fu(this.turn, this.isPromotion);
+	}
+
+	@Override
 	public String toStringRegular() {
 		return "歩";
 	}
